@@ -1,10 +1,13 @@
 #![allow(unused)]
+#![allow(non_snake_case)]
+
 
 mod xorlock;
 mod offspace;
 mod p4th;
 
-use std::{fs, io::{self, prelude::*}, path::{self, Path}, time::{SystemTime, UNIX_EPOCH}};
+
+use std::{io::{self, prelude::*}, path::{self, Path}, time::{SystemTime, UNIX_EPOCH}};
 
 fn main() {
     
@@ -19,19 +22,38 @@ let option: i32 = option.trim().parse().unwrap();
 
 match option {
     1 => { 
-            let path = p4th::check_path(p4th::get_path());
+            let path = p4th::recursive(p4th::get_path());
             let key: u8 = get_key();
-            println!("Your KEY: {}", key);
-            
+            println!("Your KEY: {}\n", key);
+           
             for line in path.lines() {
-                println!("{}", line);
-               let path = Path::new(&line);
-               xorlock::xor(path, key);
+                println!("[*] File [{}] has been encoded [*]", line);
+                let path = Path::new(&line);
+                
+                offspace::encode(path);
+                xorlock::xor(path, key);
+            }            
+        },
+
+    2 => {
+            let path = p4th::recursive(p4th::get_path());
+            print!("KEY:> ");
+            let _ = io::stdout().flush();
+            
+            let mut key = String::new();
+            io::stdin().read_line(&mut key);
+            let key: u8 = key.trim().parse().unwrap();
+            println!();
+
+            for line in path.lines() {
+                println!("[*] File [{}] has been decoded [*]", line);
+                let path = Path::new(&line);
+                
+                xorlock::xor(path, key);
+                offspace::decode(path);                    
             }
         },
-    2 => {},
-    3 => {},
-    4 => {},
+
     _ => panic!(),
 }
 
@@ -52,14 +74,13 @@ fn banner(){
                                                 v(0.1) -> snape
         ");
     println!("
-    [*] OPTIONS [*]\t\t\t\t\t[-] INFO [-]\n    
-    1) Obfuscator  \t\t\t\t\tobfuscate single/multiple files. 
-    2) Deobfuscator\t\t\t\t\tdeobfuscate single/multiple file.
-    3) Checkmate   \t\t\t\t\tobfuscate the whole disk. 
-    4) Stalemate   \t\t\t\t\tdeobfuscate the whole disk.
+    [-] OPTIONS [-]\t\t\t[-] INFO [-]\n    
+    1) Obfuscator  \t\t\tEncrypt a file/directory. 
+    2) Deobfuscator\t\t\tDecrypt a file/directory.
     ");
 
 }
+
 
 fn get_key() -> u8 {
 
@@ -70,4 +91,5 @@ fn get_key() -> u8 {
     
     nanos as u8
 
-}
+} 
+
