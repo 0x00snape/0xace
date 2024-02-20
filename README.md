@@ -1,5 +1,5 @@
 # 0xace
-<b>0xace is a simple file obfuscater/deobfuscater with simple technique but with different approach in rustlang.
+<b>0xace is a simple file obfuscater/deobfuscater with simple technique but with different approach in rustlang.</b>
 
 ## How obfuscation works in 0xace?
 0xace uses two different techinuque:<br> 
