@@ -15,6 +15,3 @@ pub fn xor(path: &Path, key: u8) {
     file.write_all(&file_content).unwrap();
 
 }
-
-
-
