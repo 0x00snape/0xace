@@ -7,6 +7,7 @@ Firstly encoding the data using two different types of characters, spaces(\x20) 
 
 ## Usage:
 ```bash
+$ sudo apt install build-essential
 $ git clone https://github.com/0x00snape/0xace.git
 $ cd 0xace
 $ cargo build --release
